@@ -13,50 +13,32 @@ export class CustomerService {
   ) {}
   
   create(createCustomerDto: CreateCustomerDto): Promise<CustomerEntity> {
-    const customer = new CustomerEntity()
-    customer.name = createCustomerDto.name
-    customer.note = createCustomerDto.note
-    customer.filename = createCustomerDto.filename
-    customer.phone = createCustomerDto.phone
-
-    return this.customerRepository.save(customer);
+    return this.customerRepository.save(createCustomerDto);
   }
 
   async findAll(): Promise<CustomerEntity[]> {
     return await this.customerRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} customer`;
+  findOne(id: number): Promise<CustomerEntity> {
+    return this.customerRepository.findOne({
+      where: { id }
+    });
   }
 
-  update(id: number, updateCustomerDto: UpdateCustomerDto) {
-    return `This action updates a #${id} customer`;
+  async update(id: number, updateCustomerDto: UpdateCustomerDto): Promise<CustomerEntity> {
+    const customer = await this.customerRepository.findOne({
+      where: { id }
+    });
+
+    return this.customerRepository.save({
+      ...customer, // existing fields
+      ...updateCustomerDto // updated fields
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} customer`;
-  }
-
-  getInfo() {
-    return {
-      'version': 1.0,
-      'location': "customer",
-      'class': 'CustomerService'
-    }
-  }
-
-  getMyUser(id: number) {
-    // const findUser = user.find( (u) => u.id === id)
-    // if(!findUser){
-    //   throw new NotFoundException('usuario não encontrado')
-    // }
-
-    // return findUser
-
-  }
-
-  getMyUserName(name: string) {
-    return 'eu aki'
+  async remove(id: number): Promise<void> {
+    const customer = await this.findOne(id);    
+    await this.customerRepository.remove(customer);
   }
 }
