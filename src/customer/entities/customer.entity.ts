@@ -1,5 +1,6 @@
 
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { ScheduleEntity } from 'src/schedule/entities/schedule.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class CustomerEntity {
@@ -24,4 +25,7 @@ export class CustomerEntity {
 
   @Column({ length: 100, nullable: true, default: null })
   phone: string;
+
+  @OneToMany(() => ScheduleEntity, (schedule) => schedule.customer) 
+  schedules: ScheduleEntity[]
 }

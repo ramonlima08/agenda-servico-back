@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { ScheduleEntity } from "src/schedule/entities/schedule.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class ServiceEntity {
@@ -19,4 +20,7 @@ export class ServiceEntity {
     default: 0
   })
   amount: number;
+
+  @OneToMany(() => ScheduleEntity, (schedule) => schedule.service)
+  schedules: ScheduleEntity[]
 }
