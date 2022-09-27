@@ -1,0 +1,15 @@
+version: '3.5'
+
+services:
+  app-agenda:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: node_nest
+    container_name: app-agenda
+    network_mode: host
+    restart: unless-stopped
+    ports:
+      - 3301:3000
+    volumes:
+      - ./dist:/app/dist
